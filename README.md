@@ -1,5 +1,3 @@
-# javascript-Interview-questions
-
 # Advanced JavaScript Interview Questions
 
 ---
