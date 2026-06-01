@@ -536,3 +536,370 @@ API Versioning helps maintain backward compatibility when APIs evolve.
 5. Optimize bottlenecks
 
 ---
+---
+
+# 8️⃣ Difference Between `null` and `undefined`
+
+| null | undefined |
+|--------|------------|
+| Intentional absence of value | Variable declared but not assigned |
+| Assigned by developer | Assigned by JavaScript |
+| Type is object (historical bug) | Type is undefined |
+
+### Example
+
+```javascript
+let a = null;
+let b;
+
+console.log(a); // null
+console.log(b); // undefined
+```
+
+### Use Cases
+
+#### null
+```javascript
+const user = null;
+```
+
+Represents intentionally empty value.
+
+#### undefined
+
+```javascript
+let age;
+```
+
+Variable exists but no value assigned.
+
+---
+
+# 9️⃣ What is a Closure?
+
+A closure is a function that remembers variables from its outer scope even after the outer function has finished execution.
+
+### Example
+
+```javascript
+function counter() {
+
+  let count = 0;
+
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+const increment = counter();
+
+console.log(increment());
+console.log(increment());
+console.log(increment());
+```
+
+### Output
+
+```javascript
+1
+2
+3
+```
+
+### Real-World Uses
+
+- Data hiding
+- Event handlers
+- Memoization
+- Timers
+
+---
+
+# 🔟 What is the Event Loop?
+
+The Event Loop allows JavaScript to handle asynchronous operations even though JavaScript is single-threaded.
+
+### Flow
+
+```text
+Call Stack
+     ↓
+Web APIs
+     ↓
+Callback Queue
+     ↓
+Event Loop
+     ↓
+Call Stack
+```
+
+### Example
+
+```javascript
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timeout");
+}, 0);
+
+console.log("End");
+```
+
+### Output
+
+```javascript
+Start
+End
+Timeout
+```
+
+### Why?
+
+`setTimeout` callback goes to the callback queue and executes only when the call stack becomes empty.
+
+---
+
+# 1️⃣1️⃣ Return Unique Values From Array
+
+### Using Set (Recommended)
+
+```javascript
+function getUnique(arr) {
+  return [...new Set(arr)];
+}
+
+console.log(
+  getUnique([1,2,2,3,3,4])
+);
+```
+
+### Output
+
+```javascript
+[1,2,3,4]
+```
+
+### Complexity
+
+```text
+Time: O(n)
+Space: O(n)
+```
+
+---
+
+# 1️⃣2️⃣ Difference Between bind(), call(), and apply()
+
+All three methods are used to change the value of `this`.
+
+### call()
+
+Invokes immediately and accepts arguments individually.
+
+```javascript
+function greet(city) {
+  console.log(this.name, city);
+}
+
+const person = {
+  name: "Hari"
+};
+
+greet.call(person, "Hyderabad");
+```
+
+---
+
+### apply()
+
+Invokes immediately and accepts arguments as an array.
+
+```javascript
+greet.apply(person, ["Hyderabad"]);
+```
+
+---
+
+### bind()
+
+Returns a new function.
+
+```javascript
+const newFn =
+  greet.bind(person, "Hyderabad");
+
+newFn();
+```
+
+---
+
+### Summary
+
+| Method | Invokes Immediately | Arguments |
+|----------|------------------|------------|
+| call | ✅ | Individual |
+| apply | ✅ | Array |
+| bind | ❌ | Returns function |
+
+---
+
+# 1️⃣3️⃣ What is a Promise?
+
+A Promise represents the eventual completion or failure of an asynchronous operation.
+
+### States
+
+```text
+Pending
+Fulfilled
+Rejected
+```
+
+### Example
+
+```javascript
+const promise = new Promise(
+  (resolve, reject) => {
+
+    setTimeout(() => {
+      resolve("Success");
+    }, 1000);
+
+  }
+);
+
+promise.then((data) => {
+  console.log(data);
+});
+```
+
+### Output after 1 second
+
+```javascript
+Success
+```
+
+---
+
+# 1️⃣4️⃣ Deep Clone vs Shallow Clone
+
+## Shallow Copy
+
+Copies only the first level.
+
+```javascript
+const obj = {
+  name: "Hari",
+  address: {
+    city: "Hyderabad"
+  }
+};
+
+const copy = {...obj};
+```
+
+### Problem
+
+```javascript
+copy.address.city = "Chennai";
+
+console.log(obj.address.city);
+```
+
+Output:
+
+```javascript
+Chennai
+```
+
+---
+
+## Deep Copy
+
+Creates completely independent copies.
+
+### Using structuredClone()
+
+```javascript
+const deepCopy =
+  structuredClone(obj);
+```
+
+---
+
+### Custom Deep Clone
+
+```javascript
+function deepClone(obj) {
+
+  if (
+    obj === null ||
+    typeof obj !== "object"
+  ) {
+    return obj;
+  }
+
+  let clone =
+    Array.isArray(obj)
+      ? []
+      : {};
+
+  for (let key in obj) {
+    clone[key] =
+      deepClone(obj[key]);
+  }
+
+  return clone;
+}
+```
+
+### Difference
+
+| Shallow Copy | Deep Copy |
+|--------------|-----------|
+| First level only | Entire object |
+| Shares nested references | Independent copy |
+| Faster | More expensive |
+
+---
+
+# 1️⃣5️⃣ What is Debouncing?
+
+Debouncing delays function execution until the user stops triggering the event for a specified time.
+
+### Common Uses
+
+- Search bars
+- API requests
+- Auto-save forms
+
+### Example
+
+```javascript
+function debounce(fn, delay) {
+
+  let timer;
+
+  return function(...args) {
+
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      fn(...args);
+    }, delay);
+
+  };
+}
+```
+
+### Usage
+
+```javascript
+const search =
+  debounce(() => {
+    console.log("Searching...");
+  }, 500);
+```
+
+---
