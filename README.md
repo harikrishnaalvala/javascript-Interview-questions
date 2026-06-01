@@ -903,3 +903,56 @@ const search =
 ```
 
 ---
+
+## 8. Closures in JavaScript
+
+A closure allows a function to access variables from its outer scope even after the outer function has finished execution.
+
+### Example
+
+```javascript
+function counter() {
+  let count = 0;
+
+  return function() {
+    count++;
+    return count;
+  };
+}
+
+const increment = counter();
+```
+
+### Real-World Uses
+- Data privacy
+- Event handlers
+- Timers
+- Memoization
+
+---
+
+## 9. JavaScript Event Loop
+
+JavaScript is single-threaded.
+
+### Flow
+1. Call Stack executes synchronous code
+2. Async tasks move to Web APIs
+3. Completed tasks move to Callback Queue
+4. Event Loop pushes them back to Call Stack
+
+### Purpose
+Enables asynchronous non-blocking behavior.
+
+---
+
+## 10. Event Delegation
+
+Instead of attaching events to multiple child elements, a single event listener is attached to the parent element using event bubbling.
+
+### Benefits
+- Better performance
+- Less memory usage
+- Handles dynamically added elements
+
+---
