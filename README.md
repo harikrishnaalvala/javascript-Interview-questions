@@ -955,8 +955,6 @@ Instead of attaching events to multiple child elements, a single event listener 
 
 ---
 
-# 🧠 JavaScript Deep Dive
-
 ---
 
 ## 1. Explain Closure with a Real Use Case
