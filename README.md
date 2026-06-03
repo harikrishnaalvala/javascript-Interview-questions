@@ -346,8 +346,6 @@ Tailwind CSS is a utility-first CSS framework that provides pre-built utility cl
 
 ---
 
-# ⚡ JavaScript
-
 ## ❓ What is the Purpose of Garbage Collection?
 
 Garbage Collection automatically removes unused objects from memory.
