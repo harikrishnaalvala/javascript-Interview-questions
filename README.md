@@ -954,3 +954,234 @@ Instead of attaching events to multiple child elements, a single event listener 
 - Handles dynamically added elements
 
 ---
+
+# 🧠 JavaScript Deep Dive
+
+---
+
+## 1. Explain Closure with a Real Use Case
+
+A closure is created when a function remembers variables from its outer scope even after the outer function has finished executing.
+
+### Example
+
+```javascript
+function createCounter() {
+  let count = 0;
+
+  return function () {
+    count++;
+    return count;
+  };
+}
+
+const counter = createCounter();
+
+console.log(counter());
+console.log(counter());
+console.log(counter());
+```
+
+### Output
+
+```javascript
+1
+2
+3
+```
+
+### Real-World Use Cases
+
+- Data privacy
+- Authentication state
+- Memoization
+- Event handlers
+- Timers
+
+### Example: User Session
+
+```javascript
+function createSession() {
+  let token = "abc123";
+
+  return {
+    getToken() {
+      return token;
+    }
+  };
+}
+```
+
+---
+
+## 2. How Does the Event Loop Work in Async API Calls?
+
+JavaScript is single-threaded but can handle asynchronous operations using the Event Loop.
+
+### Flow
+
+```text
+Call Stack
+↓
+Web APIs
+↓
+Callback Queue
+↓
+Event Loop
+↓
+Call Stack
+```
+
+### Example
+
+```javascript
+console.log("Start");
+
+fetch("/users")
+  .then(() => {
+    console.log("Data Loaded");
+  });
+
+console.log("End");
+```
+
+### Output
+
+```javascript
+Start
+End
+Data Loaded
+```
+
+The API request runs outside the call stack and executes after the stack becomes empty.
+
+---
+
+## 3. Difference Between Microtasks and Macrotasks
+
+### Microtasks
+
+- Promise callbacks
+- queueMicrotask()
+- MutationObserver
+
+### Macrotasks
+
+- setTimeout
+- setInterval
+- DOM Events
+
+### Example
+
+```javascript
+console.log("Start");
+
+setTimeout(() => {
+  console.log("Timeout");
+}, 0);
+
+Promise.resolve().then(() => {
+  console.log("Promise");
+});
+
+console.log("End");
+```
+
+### Output
+
+```javascript
+Start
+End
+Promise
+Timeout
+```
+
+### Why?
+
+Microtasks always execute before Macrotasks.
+
+---
+
+## 4. How Does Debouncing Help in Search APIs?
+
+Debouncing delays function execution until the user stops typing.
+
+### Without Debouncing
+
+```text
+H → API Call
+Ha → API Call
+Har → API Call
+Hari → API Call
+```
+
+### With Debouncing
+
+```text
+User Stops Typing
+↓
+One API Call
+```
+
+### Example
+
+```javascript
+function debounce(fn, delay) {
+  let timer;
+
+  return (...args) => {
+    clearTimeout(timer);
+
+    timer = setTimeout(() => {
+      fn(...args);
+    }, delay);
+  };
+}
+```
+
+### Benefits
+
+- Reduces API requests
+- Improves performance
+- Saves server resources
+
+---
+
+## 5. What Causes Memory Leaks in JavaScript?
+
+### Common Reasons
+
+#### Unremoved Event Listeners
+
+```javascript
+window.addEventListener("resize", handler);
+```
+
+#### Unclosed Timers
+
+```javascript
+setInterval(() => {}, 1000);
+```
+
+#### Closures Holding References
+
+```javascript
+function outer() {
+  const hugeData = new Array(1000000);
+
+  return () => hugeData;
+}
+```
+
+#### Detached DOM Nodes
+
+References remain after DOM removal.
+
+### Prevention
+
+- Remove listeners
+- Clear timers
+- Clean useEffect
+- Avoid unnecessary references
+
+---
