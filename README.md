@@ -1183,3 +1183,255 @@ References remain after DOM removal.
 - Avoid unnecessary references
 
 ---
+
+
+
+##  What are Higher-Order Functions?
+
+A Higher-Order Function is a function that:
+
+- Accepts another function as an argument, or
+- Returns a function
+
+### Examples
+
+```javascript
+const numbers = [1, 2, 3, 4];
+
+const doubled = numbers.map((num) => num * 2);
+```
+
+### Custom Example
+
+```javascript
+function greet(callback) {
+  callback();
+}
+
+greet(() => console.log("Hello"));
+```
+
+---
+
+##  What are Pure Functions?
+
+A Pure Function:
+
+- Produces the same output for the same input.
+- Has no side effects.
+
+### Pure Function
+
+```javascript
+function add(a, b) {
+  return a + b;
+}
+```
+
+### Impure Function
+
+```javascript
+let count = 0;
+
+function increment() {
+  count++;
+}
+```
+
+Reason: Modifies external state.
+
+---
+
+##  Difference Between var, let, and const
+
+| Feature    | var      | let       | const     |
+| ---------- | -------- | --------- | --------- |
+| Scope      | Function | Block     | Block     |
+| Redeclare  | Yes      | No        | No        |
+| Reassign   | Yes      | Yes       | No        |
+| Hoisting   | Yes      | Yes       | Yes       |
+| TDZ        | No       | Yes       | Yes       |
+
+### Example
+
+```javascript
+{
+  var a = 10;
+  let b = 20;
+}
+
+console.log(a); // 10
+console.log(b); // ReferenceError
+```
+
+---
+
+##  Output-Based Question (var vs let)
+
+### Code
+
+```javascript
+for (var i = 0; i < 5; i++) {
+  setTimeout(function () {
+    console.log("var:", i);
+  }, 1000);
+}
+
+for (let i = 0; i < 5; i++) {
+  setTimeout(function () {
+    console.log("let:", i);
+  }, 1000);
+}
+```
+
+### Output
+
+```text
+var: 5
+var: 5
+var: 5
+var: 5
+var: 5
+
+let: 0
+let: 1
+let: 2
+let: 3
+let: 4
+```
+
+### Reason
+
+#### var
+
+`var` is function-scoped.
+
+All callbacks share the same variable `i`.
+
+By the time `setTimeout` executes:
+
+```javascript
+i === 5
+```
+
+#### let
+
+`let` is block-scoped.
+
+A new `i` is created for every iteration.
+
+---
+
+### Fixing var Using Closure
+
+```javascript
+for (var i = 0; i < 5; i++) {
+  ((i) => {
+    setTimeout(() => {
+      console.log(i);
+    }, 1000);
+  })(i);
+}
+```
+
+Output:
+
+```text
+0
+1
+2
+3
+4
+```
+
+---
+
+## What are Promises in JavaScript?
+
+A Promise represents the eventual completion (or failure) of an asynchronous operation.
+
+### States
+
+```text
+Pending
+   ↓
+Fulfilled
+or
+Rejected
+```
+
+### Example
+
+```javascript
+const promise = new Promise((resolve, reject) => {
+  resolve("Success");
+});
+
+promise.then((result) => console.log(result));
+```
+
+Output:
+
+```text
+Success
+```
+
+---
+
+## Promise.all() vs Promise.any()
+
+### Promise.all()
+
+Waits for all promises to resolve.
+
+```javascript
+Promise.all([
+  fetchUsers(),
+  fetchPosts(),
+  fetchComments(),
+]);
+```
+
+### Behavior
+
+- Resolves when all succeed.
+- Rejects immediately if one fails.
+
+### Use Case
+
+Dashboard where all APIs are required.
+
+---
+
+### Promise.any()
+
+Returns the first successfully resolved promise.
+
+```javascript
+Promise.any([
+  apiServer1(),
+  apiServer2(),
+  apiServer3(),
+]);
+```
+
+### Behavior
+
+- Resolves when one succeeds.
+- Rejects only if all fail.
+
+### Use Case
+
+Multiple mirror servers or CDN endpoints.
+
+---
+
+### Comparison
+
+| Promise.all() | Promise.any() |
+|--------------|--------------|
+| All must succeed | One success is enough |
+| Fails on first rejection | Fails only if all reject |
+| Returns all results | Returns first successful result |
+
+---
